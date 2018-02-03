@@ -1,0 +1,16 @@
+version: '2'
+services:
+    ella_finance-mongodb:
+        image: mongo:3.4.10
+        ports:
+            - "27017:27017"
+        command: mongos --configdb ella_finance-mongodb-config
+    ella_finance-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    ella_finance-mongodb-config:
+        image: mongo:3.4.10
+        container_name: ella_finance-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
